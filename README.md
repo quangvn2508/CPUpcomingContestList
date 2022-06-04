@@ -1,7 +1,10 @@
-To run:
+1. Required: python3
+2. Setup:
 ```
-pip install -r requirements.txt
-python main.py
+make env
+make prep
 ```
-
-Then go to [localhost:5000](http://localhost:5000/)
+3. Start:
+```
+make run
+```
