@@ -45,6 +45,8 @@ def get_vnoj():
     vnoj = BeautifulSoup(data.content, 'html.parser')
     l = []
     for row in vnoj.find("h4", string="Upcoming Contests").find_next_sibling().find("tbody").find_all('tr'):
+        if row.find("span", class_="contest-tag") == None: # If rated, span with class contest-tag exist
+            continue
         contest_atag = row.find('a')
         contest_time_string = row.find('div', class_="time-left").contents[0] # MMM D, YYYY, HH:mm
         start_time_string = contest_time_string[1:contest_time_string.find("<br/>")]
