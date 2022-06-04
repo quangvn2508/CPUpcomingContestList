@@ -8,5 +8,5 @@ class UpcomingContest:
     def toLi(self):
         return ("<li>"
             f"<span>[{self.time.strftime('%d-%m-%Y %H:%M %z')}]:</span>&nbsp;"
-            f"<a href='{self.url}'>{self.name}</a>"
+            f"<a href='{self.url}' target='_blank'>{self.name}</a>"
             "</li>")

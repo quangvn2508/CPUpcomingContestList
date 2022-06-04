@@ -11,7 +11,7 @@ def get_atcoder():
         contest_time = datetime.datetime.strptime(row.time.contents[0], '%Y-%m-%d %H:%M:%S%z')
         contest_atag = row.find_all('td')[1].a
         contest_name = contest_atag.contents[0]
-        contest_url = contest_atag['href']
+        contest_url = f"https://atcoder.jp{contest_atag['href']}"
         l.append(UpcomingContest(contest_time, contest_name, contest_url))
     return l
 
