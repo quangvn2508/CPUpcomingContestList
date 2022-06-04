@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from UpcomingContest import UpcomingContest
+from Error import FetchError
 import datetime
 import json
 
@@ -19,12 +20,15 @@ def get_atcoder():
 def get_codeforces():
     l = []
     data = requests.get("https://codeforces.com/api/contest.list")
-    json = data.json()
-    if json["status"] != "OK":
-        return []
-    for c in json["result"]:
-        if c['relativeTimeSeconds'] >= 0: continue
-        l.append(UpcomingContest(datetime.datetime.fromtimestamp(c['startTimeSeconds']), c['name'], f"https://codeforces.com/contests/{c['id']}"))
+    try:
+        _json = data.json()
+        if _json["status"] != "OK":
+            return []
+        for c in _json["result"]:
+            if c['relativeTimeSeconds'] >= 0: continue
+            l.append(UpcomingContest(datetime.datetime.fromtimestamp(c['startTimeSeconds']), c['name'], f"https://codeforces.com/contests/{c['id']}"))
+    except json.decoder.JSONDecodeError:
+        l.append(FetchError(data.text))
     return l
 
 def get_leetcode():
