@@ -39,3 +39,14 @@ def get_leetcode():
     for c in contest_list:
         l.append(UpcomingContest(datetime.datetime.fromtimestamp(c['startTime']), c['title'], f"https://leetcode.com/contest/{c['titleSlug']}"))
     return l
+
+def get_vnoj():
+    data = requests.get("https://oj.vnoi.info/contests/", headers={'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8'})
+    vnoj = BeautifulSoup(data.content, 'html.parser')
+    l = []
+    for row in vnoj.find("h4", string="Upcoming Contests").find_next_sibling().find("tbody").find_all('tr'):
+        contest_atag = row.find('a')
+        contest_time_string = row.find('div', class_="time-left").contents[0] # MMM D, YYYY, HH:mm
+        start_time_string = contest_time_string[1:contest_time_string.find("<br/>")]
+        l.append(UpcomingContest(datetime.datetime.strptime(start_time_string + " +0700", '%b %d, %Y, %H:%M %z'), contest_atag.contents[0], f"https://oj.vnoi.info{contest_atag['href']}"))
+    return l

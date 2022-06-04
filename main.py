@@ -1,5 +1,5 @@
 from flask import Flask
-from GetUpcomingContests import get_atcoder, get_codeforces, get_leetcode
+from GetUpcomingContests import get_atcoder, get_codeforces, get_leetcode, get_vnoj
 
 app = Flask(__name__)
 
@@ -10,6 +10,7 @@ def hello_world():
     l.extend(get_atcoder())
     l.extend(get_codeforces())
     l.extend(get_leetcode())
+    l.extend(get_vnoj())
     for c in sorted(l, key=lambda _c : _c.time.timestamp()):
         li += c.toLi()
     return "<ul>" + li + "</ul>"
