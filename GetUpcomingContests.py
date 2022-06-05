@@ -48,7 +48,9 @@ def get_vnoj():
     data = requests.get("https://oj.vnoi.info/contests/", headers={'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8'})
     vnoj = BeautifulSoup(data.content, 'html.parser')
     l = []
-    for row in vnoj.find("h4", string="Upcoming Contests").find_next_sibling().find("tbody").find_all('tr'):
+    table_body = vnoj.find("h4", string="Upcoming Contests").find_next_sibling().find("tbody")
+    if table_body == None: return l
+    for row in table_body.find_all('tr'):
         if row.find("span", class_="contest-tag") == None: # If rated, span with class contest-tag exist
             continue
         contest_atag = row.find('a')
