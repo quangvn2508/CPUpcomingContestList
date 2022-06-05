@@ -1,10 +1,12 @@
 1. Required: python3
-2. Setup:
+2. Setup environment and install dependencies:
 ```
-make env
-make prep
+python3 -m venv env
+source ./env/bin/activate
+pip install -r requirements.txt
 ```
 3. Start:
 ```
-make run
+source ./env/bin/activate
+python main.py
 ```
