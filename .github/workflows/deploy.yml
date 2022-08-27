@@ -25,5 +25,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         port: ${{ secrets.PORT }}
-        script: ${{ secrets.SCRIPTS }}
+        script: |
+          cd ${{ secrets.PWD }}
+          git pull origin master
+          source env/bin/activate
+          pip install -r requirements.txt
+          ${{ secrets.DEPLOY_SCRIPT }}
 

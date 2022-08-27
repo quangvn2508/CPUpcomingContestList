@@ -10,3 +10,9 @@ class UpcomingContest:
             f"<span>[{self.time.strftime('%d-%m-%Y %H:%M %z')}]:</span>&nbsp;"
             f"<a href='{self.url}' target='_blank'>{self.name}</a>"
             "</li>")
+    def toDict(self):
+        return {
+            "name": self.name,
+            "time": self.time.strftime('%d-%m-%Y %H:%M %z'),
+            "url": self.url
+        }
