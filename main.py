@@ -1,24 +1,20 @@
 from flask import Flask
-from GetUpcomingContests import get_atcoder, get_codeforces, get_leetcode, get_vnoj
-import webbrowser
+from GetUpcomingContests import get_all_as_li
+import time
+
+current_contests_list = ""
+last_update = 0
+AUTO_UPDATE_WAIT_TIME = 60 * 60 # 1 hour
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/upcoming-contest/")
 def hello_world():
-    li = ""
-    l = []
-    l.extend(get_atcoder())
-    l.extend(get_codeforces())
-    l.extend(get_leetcode())
-    l.extend(get_vnoj())
-    for c in sorted(l, key=lambda _c : _c.time.timestamp()):
-        li += c.toLi()
-    return "<ul>" + li + "</ul>"
-
-def open_browser():
-    webbrowser.open_new('http://127.0.0.1:5000/')
+    global current_contests_list, last_update
+    if last_update + AUTO_UPDATE_WAIT_TIME <= time.time():
+        last_update = time.time()
+        current_contests_list = get_all_as_li()
+    return f"<h3>Last updated: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(last_update))}</h3><ul>{current_contests_list}</ul>"
 
 if __name__ == '__main__':
-    open_browser()
     app.run(debug=True, use_reloader=False)

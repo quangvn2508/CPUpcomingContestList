@@ -58,3 +58,14 @@ def get_vnoj():
         start_time_string = contest_time_string[1:contest_time_string.find("<br/>")]
         l.append(UpcomingContest(datetime.datetime.strptime(start_time_string + " +0700", '%b %d, %Y, %H:%M %z'), contest_atag.contents[0], f"https://oj.vnoi.info{contest_atag['href']}"))
     return l
+
+def get_all_as_li():
+    l = []
+    l.extend(get_atcoder())
+    l.extend(get_codeforces())
+    l.extend(get_leetcode())
+    l.extend(get_vnoj())
+    li = ""
+    for c in sorted(l, key=lambda _c : _c.time.timestamp()):
+        li += c.toLi()
+    return li
