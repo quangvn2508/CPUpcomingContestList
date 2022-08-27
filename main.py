@@ -8,7 +8,7 @@ AUTO_UPDATE_WAIT_TIME = 60 * 60 # 1 hour
 
 app = Flask(__name__)
 
-@app.route("/upcoming-contest/")
+@app.route("/")
 def hello_world():
     global current_contests_list, last_update
     if last_update + AUTO_UPDATE_WAIT_TIME <= time.time():
@@ -18,3 +18,4 @@ def hello_world():
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=False)
+
