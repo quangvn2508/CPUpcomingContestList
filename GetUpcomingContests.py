@@ -48,8 +48,13 @@ def get_vnoj():
     data = requests.get("https://oj.vnoi.info/contests/", headers={'Accept-Language': 'en-GB,en-US;q=0.9,en;q=0.8'})
     vnoj = BeautifulSoup(data.content, 'html.parser')
     l = []
-    table_body = vnoj.find("h4", string="Upcoming Contests").find_next_sibling().find("tbody")
+
+    upcoming_contest_component = vnoj.find("h4", string="Upcoming Contests")
+    if upcoming_contest_component == None: return l
+
+    table_body = upcoming_contest_component.find_next_sibling().find("tbody")
     if table_body == None: return l
+
     for row in table_body.find_all('tr'):
         if row.find("span", class_="contest-tag") == None: # If rated, span with class contest-tag exist
             continue
@@ -58,11 +63,17 @@ def get_vnoj():
         start_time_string = contest_time_string[1:contest_time_string.find("<br/>")]
         l.append(UpcomingContest(datetime.datetime.strptime(start_time_string + " +0700", '%b %d, %Y, %H:%M %z'), contest_atag.contents[0], f"https://oj.vnoi.info{contest_atag['href']}"))
     return l
-
+import traceback
 def get_all():
     l = []
-    l.extend(get_atcoder())
-    l.extend(get_codeforces())
-    l.extend(get_leetcode())
-    l.extend(get_vnoj())
+    try:
+        l.extend(get_atcoder())
+        l.extend(get_codeforces())
+        l.extend(get_leetcode())
+        l.extend(get_vnoj())
+    except:
+        f = open('log.txt', 'a')
+        f.write("Error at " + datetime.datetime.now().strftime('%d-%m-%Y %H:%M %z') + "\n")
+        f.write(traceback.format_exc())
+        f.write("---")
     return sorted(l, key=lambda _c : _c.time.timestamp())
